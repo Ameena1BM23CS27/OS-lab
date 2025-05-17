@@ -1,0 +1,75 @@
+#include <stdio.h>
+
+#define MAX_BLOCKS 100
+
+int main() {
+    int disk[MAX_BLOCKS] = {0};
+    int start, length;
+    char choice;
+
+    do {
+        printf("\nEnter starting block (0 to %d): ", MAX_BLOCKS - 1);
+        scanf("%d", &start);
+        printf("Enter number of blocks to allocate: ");
+        scanf("%d", &length);
+
+        if (start < 0 || start + length > MAX_BLOCKS) {
+            printf("Invalid block range.\n");
+        } else {
+            int canAllocate = 1;
+
+            for (int i = start; i < start + length; i++) {
+                if (disk[i] == 1) {
+                    canAllocate = 0;
+                    break;
+                }
+            }
+
+            if (canAllocate) {
+                for (int i = start; i < start + length; i++) {
+                    disk[i] = 1;
+                }
+
+                printf("File allocated from block %d to %d.\n", start, start + length - 1);
+                printf("Allocated Memory Locations: ");
+                for (int i = start; i < start + length; i++) {
+                    printf("%d ", i);
+                }
+                printf("\n");
+            } else {
+                printf("Allocation failed: Some blocks are already in use.\n");
+            }
+        }
+
+        printf("\nDisk Block Status:\n");
+        for (int i = 0; i < MAX_BLOCKS; i++) {
+            printf("%d", disk[i]);
+        }
+        printf("\n");
+
+        printf("Do you want to allocate another file? (y/n): ");
+        scanf(" %c", &choice);
+    } while (choice == 'y' || choice == 'Y');
+
+    printf("Exiting program.\n");
+    return 0;
+}
+ OUTPUT:
+
+Enter starting block (0 to 99): 13
+Enter number of blocks to allocate: 5
+File allocated from block 13 to 17.
+Allocated Memory Locations: 13 14 15 16 17 
+
+Disk Block Status:
+0000000000000111110000000000000000000000000000000000000000000000000000000000000000000000000000000000
+Do you want to allocate another file? (y/n): y
+
+Enter starting block (0 to 99): 15
+Enter number of blocks to allocate: 3
+Allocation failed: Some blocks are already in use.
+
+Disk Block Status:
+0000000000000111110000000000000000000000000000000000000000000000000000000000000000000000000000000000
+Do you want to allocate another file? (y/n): n
+Exiting program.
